@@ -151,6 +151,7 @@ int main(int argc, char *argv[]){
 		printf("Type the path to the ROM\n./chip8 [path_to_rom]\n");
 		exit(0);
 	}
+
 	init_graphics();
 	load_sprites();
 	load_program(argv[1]);
@@ -219,7 +220,7 @@ void render(){
 void draw_bytes(unsigned char x, unsigned char y, unsigned char byte_count){
 	v[0xf] = 0;
 	for(int i = 0; i < byte_count; i++){
-		screen[y+i][x] 	 ^=  (memory[i+i_register] & 0xf0)		   >> 7;
+		screen[y+i][x]	 ^=	 (memory[i+i_register] & 0xf0)		   >> 7;
 		screen[y+i][x+1] ^= ((memory[i+i_register] & 0xf0) & 0x40) >> 6;
 		screen[y+i][x+2] ^= ((memory[i+i_register] & 0xf0) & 0x20) >> 5;
 		screen[y+i][x+3] ^= ((memory[i+i_register] & 0xf0) & 0x10) >> 4;
@@ -341,8 +342,8 @@ void execute_op_code(unsigned short instruction){
 					v[x] >>= 1;
 					break;
 				case 0x7:
-					v[x] = v[y] - v[x];
 					v[0xf] = v[y] > v[x] ? 1 : 0;
+					v[x] = v[y] - v[x];
 					break;
 				case 0xe:
 					v[0xf] = (v[x] >> 7) & 1 ? 1 : 0;
