@@ -207,9 +207,11 @@ void init_graphics(){
 }
 
 void render(){
+	gfx_clear();
 	for(int i = 0; i < HEIGHT; i++){
 		for(int j = 0; j < WIDTH; j++){
 			if(screen[i][j]){
+				gfx_color(0xff, 0xff, 0xff);
 				gfx_fill_rect(j * PIXEL_WIDTH, i * PIXEL_WIDTH, PIXEL_WIDTH, PIXEL_WIDTH);
 			}
 		}
@@ -260,13 +262,19 @@ void execute_op_code(unsigned short instruction){
 	unsigned char x = higher & 0x0f;
 	unsigned char y = lower >> 4;
 
-	printf("Instruction: %x\n", instruction);
+	/*printf("Instruction: %x\n", instruction);
 	printf("Higher: %x\n", higher);
 	printf("Lower: %x\n", lower);
 	printf("OP Code: %x\n", opCode);
 	printf("NNN: %x\n", nnn);
 	printf("X: %x\n", x);
-	printf("Y: %x\n\n", y);
+	printf("Y: %x\n", y);
+	printf("I: %x\n\n", i_register);
+
+	for(int i = 0; i < 0x10; i++){
+		printf("v[%d] = %x   ", i, v[i]);
+	}
+	printf("\n\n\n");*/
 
 	switch(opCode){
 		case 0x0000:
