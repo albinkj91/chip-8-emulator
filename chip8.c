@@ -207,11 +207,13 @@ void init_graphics(){
 }
 
 void render(){
-	gfx_clear();
 	for(int i = 0; i < HEIGHT; i++){
 		for(int j = 0; j < WIDTH; j++){
 			if(screen[i][j]){
 				gfx_color(0xff, 0xff, 0xff);
+				gfx_fill_rect(j * PIXEL_WIDTH, i * PIXEL_WIDTH, PIXEL_WIDTH, PIXEL_WIDTH);
+			}else{
+				gfx_color(0x0, 0x0, 0x0);
 				gfx_fill_rect(j * PIXEL_WIDTH, i * PIXEL_WIDTH, PIXEL_WIDTH, PIXEL_WIDTH);
 			}
 		}
@@ -281,6 +283,7 @@ void execute_op_code(unsigned short instruction){
 			if(lower == 0xe0){
 				clear_screen();
 				gfx_clear();
+				printf("Clearing screen\n");
 			}else if(lower == 0xee){
 				pc = stack[sp--];
 			}else{
@@ -384,16 +387,18 @@ void execute_op_code(unsigned short instruction){
 			pc += 2;
 			break;
 		case 0xe000:
-			if(gfx_event_waiting()){
-				char pressed_key = gfx_wait();
-				if(lower == 0x9e){
-					if(pressed_key == keys[v[x]]){
-						pc += 2;
-					}
-				}else if(lower == 0xa1){
-					if(pressed_key != keys[v[x]]){
-						pc += 2;
-					}
+			if(!gfx_event_waiting()){
+				pc += 2;
+				break;
+			}
+			char pressed_key = gfx_wait();
+			if(lower == 0x9e){
+				if(pressed_key == keys[v[x]]){
+					pc += 2;
+				}
+			}else if(lower == 0xa1){
+				if(pressed_key != keys[v[x]]){
+					pc += 2;
 				}
 			}
 			pc += 2;
